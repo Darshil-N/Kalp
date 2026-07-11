@@ -65,11 +65,11 @@ def create_generation_plan(pipeline_id: str, base_prompt: str, user_description:
     
     # Define suffixes (dynamic prompt rotation handled in Generation stage, these are base modifiers)
     suffixes = {
-        "noisy": "with gaussian noise, grain, sensor artifacts",
-        "blur": "motion blurred, out of focus, depth of field blur",
-        "similar": "slight angle variation, clean realistic version",
-        "dark": "low light, night condition, underexposed",
-        "occluded": "partially hidden, overlapping objects, real-world clutter"
+        "noisy": "amateur smartphone photo, cheap CCTV security camera footage, unedited raw photo, bad lighting, terrible angle, harsh flash, messy industrial background, non-cinematic, with heavy sensor artifacts",
+        "blur": "amateur smartphone photo, cheap CCTV security camera footage, unedited raw photo, bad lighting, terrible angle, out of focus, motion blurred, non-cinematic",
+        "similar": "amateur smartphone photo, cheap CCTV security camera footage, unedited raw photo, bad lighting, terrible angle, harsh flash, messy industrial background, non-cinematic",
+        "dark": "amateur smartphone photo, cheap CCTV security camera footage, unedited raw photo, bad lighting, extremely dark, underexposed, night condition, non-cinematic",
+        "occluded": "amateur smartphone photo, cheap CCTV security camera footage, unedited raw photo, bad lighting, partially hidden, overlapping objects, messy industrial background, non-cinematic"
     }
     
     keys = list(ratios.keys())

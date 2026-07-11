@@ -1,9 +1,43 @@
 import os
 import json
 import asyncio
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
 import random
 from connection_manager import manager
+
+def apply_defects(img: Image.Image, agent_type: str) -> Image.Image:
+    """Programmatically apply industrial defects using PIL to guarantee zero domain gap."""
+    if agent_type == "blur":
+        # Apply heavy Gaussian blur to simulate out-of-focus camera
+        blur_radius = random.uniform(2.0, 5.0)
+        img = img.filter(ImageFilter.GaussianBlur(blur_radius))
+    
+    elif agent_type == "dark":
+        # Drop brightness and contrast drastically
+        enhancer = ImageEnhance.Brightness(img)
+        img = enhancer.enhance(random.uniform(0.2, 0.4))
+        contrast = ImageEnhance.Contrast(img)
+        img = contrast.enhance(random.uniform(0.5, 0.8))
+        
+    elif agent_type == "noisy":
+        # Add grain/noise by blending with a noise layer, then dropping sharpness
+        noise = Image.effect_noise((img.width, img.height), random.randint(30, 80)).convert("RGB")
+        img = Image.blend(img, noise, alpha=random.uniform(0.15, 0.35))
+        enhancer = ImageEnhance.Sharpness(img)
+        img = enhancer.enhance(random.uniform(0.0, 0.5))
+        
+    elif agent_type == "occluded":
+        # Randomly draw some dark blocking rectangles/lines to simulate things in the way
+        draw = ImageDraw.Draw(img)
+        for _ in range(random.randint(1, 3)):
+            x0 = random.randint(0, img.width // 2)
+            y0 = random.randint(0, img.height // 2)
+            x1 = x0 + random.randint(50, 200)
+            y1 = y0 + random.randint(50, 400)
+            draw.rectangle([x0, y0, x1, y1], fill=(20, 20, 20))
+            
+    # For 'similar', leave relatively untouched or slight color shift
+    return img
 
 from google import genai
 from io import BytesIO
@@ -126,6 +160,9 @@ async def run_generation_pipeline(pipeline_id: str):
                     "message": f"Drift detected (Sim: {similarity:.2f}). Retrying..."
                 })
                 continue
+            
+            # Hybrid Approach: Apply actual mathematical defects to override the model's aesthetic bias
+            img = apply_defects(img, agent_type)
             
             # Save valid generated image
             img_path = os.path.join(agent_out_dir, f"{agent_type}_{success_count}.jpg")
