@@ -26,6 +26,10 @@ function App() {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  // API Config for Deployment
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+  const WS_URL = API_URL.replace(/^http/, 'ws')
+
   // Calculate cost: roughly 1 INR per 50 images ($0.01)
   const cost = (imageQuantity / 50) * 1.50
 
@@ -61,7 +65,7 @@ function App() {
     })
 
     try {
-      const response = await fetch('http://localhost:8000/generate', {
+      const response = await fetch(`${API_URL}/generate`, {
         method: 'POST',
         body: formData,
       })
@@ -88,7 +92,7 @@ function App() {
     setErrorMsg('')
     
     // Connect to WebSocket first
-    const ws = new WebSocket(`ws://localhost:8000/ws/${pipelineId}`)
+    const ws = new WebSocket(`${WS_URL}/ws/${pipelineId}`)
     wsRef.current = ws
     
     ws.onmessage = (event) => {
@@ -107,7 +111,7 @@ function App() {
         setDriftWarnings(prev => [msg.message, ...prev].slice(0, 5))
       } else if (msg.type === 'packaging_complete') {
         setStatusMessage(msg.message)
-        setDownloadUrl(`http://localhost:8000${msg.download_url}`)
+        setDownloadUrl(`${API_URL}${msg.download_url}`)
       } else if (msg.type === 'complete') {
         setStatusMessage(msg.message)
       } else if (msg.type === 'error') {
@@ -117,7 +121,7 @@ function App() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/confirm-prompt', {
+      const response = await fetch(`${API_URL}/confirm-prompt`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

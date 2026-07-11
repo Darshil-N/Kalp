@@ -20,9 +20,19 @@ os.makedirs(KALP_TMP_DIR, exist_ok=True)
 app = FastAPI(title="Kalp API", version="1.0.0")
 
 # CORS Configuration
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+origins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    FRONTEND_URL
+]
+
+# Ensure no duplicates and handle trailing slashes
+origins = list(set([o.rstrip("/") for o in origins if o]))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust this in production
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
