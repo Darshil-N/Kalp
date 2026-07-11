@@ -133,7 +133,8 @@ async def run_generation_pipeline(pipeline_id: str):
     async def agent_task(agent_config):
         agent_type = agent_config["agent"]
         total_needed = agent_config["count"]
-        full_prompt = f"{plan['base_prompt']}, {agent_config['prompt_suffix']}"
+        # Rigid Prompt Injection: Lock the object identity, then apply environment
+        full_prompt = f"A highly detailed photo of EXACTLY this object: [{plan['base_prompt']}]. The object is situated in {agent_config['prompt_suffix']}"
         
         agent_out_dir = os.path.join(generated_dir, agent_type)
         os.makedirs(agent_out_dir, exist_ok=True)

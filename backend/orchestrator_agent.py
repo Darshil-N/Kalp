@@ -63,13 +63,13 @@ def create_generation_plan(pipeline_id: str, base_prompt: str, user_description:
     agents = []
     remaining = total_images
     
-    # Define suffixes (dynamic prompt rotation handled in Generation stage, these are base modifiers)
+    # Define suffixes for Rigid Prompt Injection (environment + defect modifier)
     suffixes = {
-        "noisy": "amateur smartphone photo, cheap CCTV security camera footage, unedited raw photo, bad lighting, terrible angle, harsh flash, messy industrial background, non-cinematic, with heavy sensor artifacts",
-        "blur": "amateur smartphone photo, cheap CCTV security camera footage, unedited raw photo, bad lighting, terrible angle, out of focus, motion blurred, non-cinematic",
-        "similar": "amateur smartphone photo, cheap CCTV security camera footage, unedited raw photo, bad lighting, terrible angle, harsh flash, messy industrial background, non-cinematic",
-        "dark": "amateur smartphone photo, cheap CCTV security camera footage, unedited raw photo, bad lighting, extremely dark, underexposed, night condition, non-cinematic",
-        "occluded": "amateur smartphone photo, cheap CCTV security camera footage, unedited raw photo, bad lighting, partially hidden, overlapping objects, messy industrial background, non-cinematic"
+        "noisy": "a messy, dusty industrial factory background, captured with a cheap CCTV security camera exhibiting heavy ISO sensor artifacts.",
+        "blur": "a busy manufacturing warehouse, captured by a moving handheld camera resulting in severe motion blur and out-of-focus elements.",
+        "similar": "a standard industrial environment, illuminated by harsh, uneven artificial flash lighting.",
+        "dark": "an extremely dark, unlit workshop corner, severely underexposed and shadowy.",
+        "occluded": "a cluttered production line, where the object is partially hidden and overlapping with other surrounding industrial scrap."
     }
     
     keys = list(ratios.keys())
