@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme {
+  --color-kalp-brand: #0A0A0A;
+  --color-kalp-accent: #3b82f6;
+}
+
+body {
+  background-color: var(--color-kalp-brand);
+  color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+}
