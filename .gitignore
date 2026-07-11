@@ -25,6 +25,11 @@ pnpm-debug.log*
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
+htmlcov/
+.tox/
+.coverage
+coverage.xml
 
 # Environments
 .env
@@ -36,8 +41,24 @@ env.bak/
 venv.bak/
 
 # Project specific ignores
-/backend/kalp_dataset_*.zip
+backend/kalp_dataset_*.zip
+*.zip
+tmp/
 
 # Cloud Run / Serverless
 .serverless/
 .gcp/
+
+# Hackathon / Planning docs (Optional, but usually good to ignore working drafts)
+Gaps.md
+IMPLEMENTATION_PLAN.md
+KALP_WORKFLOW.md
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
