@@ -4,3 +4,6 @@ websockets
 pydantic
 python-multipart
 python-dotenv
+numpy
+Pillow
+google-genai
