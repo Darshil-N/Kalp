@@ -19,7 +19,7 @@ def real_generate_image(prompt: str, agent_type: str, index: int) -> Image.Image
         client = genai.Client(api_key=api_key)
         # Hackathon Model: Nano Banana 2 Lite
         result = client.models.generate_images(
-            model='gemini-3.1-flash-lite-image',
+            model='imagen-4.0-fast-generate-001',
             prompt=prompt,
             config=genai.types.GenerateImagesConfig(
                 number_of_images=1,

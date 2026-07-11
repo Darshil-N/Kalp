@@ -110,6 +110,9 @@ function App() {
         setDownloadUrl(`http://localhost:8000${msg.download_url}`)
       } else if (msg.type === 'complete') {
         setStatusMessage(msg.message)
+      } else if (msg.type === 'error') {
+        setStatusMessage(`Error: ${msg.message}`)
+        setErrorMsg(msg.message)
       }
     }
 
@@ -161,13 +164,8 @@ function App() {
 
   useEffect(() => {
     if (downloadUrl) {
-      const a = document.createElement('a')
-      a.href = downloadUrl
-      // The download attribute helps force download instead of opening in a new tab if supported
-      a.download = downloadUrl.split('/').pop() || 'dataset.zip'
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
+      // Use window.location to trigger download reliably across origins
+      window.location.href = downloadUrl
     }
   }, [downloadUrl])
 
@@ -200,10 +198,10 @@ function App() {
             <div className="space-y-8 animate-in fade-in zoom-in duration-500">
               <div className="text-left border-b border-white/10 pb-6">
                 <h2 className="text-2xl font-semibold mb-2 flex items-center gap-3">
-                  <div className={`w-2 h-2 rounded-full ${statusMessage.includes('complete') || statusMessage.includes('successfully') ? 'bg-blue-500' : 'bg-green-500 animate-pulse'}`}></div>
-                  {statusMessage.includes('Label') ? 'Auto-Labeling Dataset' : statusMessage.includes('complete') || statusMessage.includes('successfully') ? 'Pipeline Complete' : 'Generating Dataset'}
+                  <div className={`w-2 h-2 rounded-full ${statusMessage.includes('Error') ? 'bg-red-500' : statusMessage.includes('complete') || statusMessage.includes('successfully') ? 'bg-blue-500' : 'bg-green-500 animate-pulse'}`}></div>
+                  {statusMessage.includes('Error') ? 'Pipeline Error' : statusMessage.includes('Label') ? 'Auto-Labeling Dataset' : statusMessage.includes('complete') || statusMessage.includes('successfully') ? 'Pipeline Complete' : 'Generating Dataset'}
                 </h2>
-                <p className="text-sm text-white/50 font-mono">{statusMessage || 'Initializing agents...'}</p>
+                <p className={`text-sm font-mono ${statusMessage.includes('Error') ? 'text-red-400' : 'text-white/50'}`}>{statusMessage || 'Initializing agents...'}</p>
                 <p className="text-xs text-white/40 mt-1">Pipeline ID: {pipelineId}</p>
               </div>
 
